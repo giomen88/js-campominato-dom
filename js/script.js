@@ -51,6 +51,8 @@ playButton.addEventListener('click', () => {
     const rows = 10;
     const cells = 10;
     const totalCells = rows * cells;
+    let attempt = 0;
+
 
     // # FUNZIONI
     const createCell = content => {
@@ -61,19 +63,41 @@ playButton.addEventListener('click', () => {
         return cellElement;
     }
 
-
     const onCellClick = event => {
         event.target.classList.add('clicked');
         console.log(event.target.innerText);
+        do {
+            attempt++;
+        } while (event.target.classList.contains('clicked'));
+        console.log(attempt);
     }
 
     // # SVOLGIMENTO
     for (let i = 1; i <= totalCells; i++) {
+
 
         const cell = createCell(i);
 
         cell.addEventListener('click', onCellClick);
 
         grid.appendChild(cell);
+
+    }
+
+
+    // MILESTONE2
+    for (let i = 0; i < 16; i++) {
+        const min = 1;
+        const max = 100;
+        const extractedNumbers = [];
+
+        let randomNumber = Math.floor(Math.random() * (max + 1) + min);
+        do {
+            extractedNumbers.push(randomNumber)
+        } while (!extractedNumbers.includes(randomNumber));
+
+        console.log(extractedNumbers);
+
+
     }
 })

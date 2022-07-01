@@ -25,6 +25,7 @@ main {
 
 #grid .cell.clicked {
     background-color: lightskyblue;
+    cursor: not-allowed;
 }
 
 footer {
