@@ -15,16 +15,19 @@ main {
 }
 
 #grid .cell {
-    width: 10%;
-    height: 10%;
     border: 1px solid black;
     text-align: center;
     line-height: 50px;
     cursor: pointer;
 }
 
-#grid .cell.clicked {
+#grid .cell.clicked.blue {
     background-color: lightskyblue;
+    cursor: not-allowed;
+}
+
+#grid .cell.clicked.red {
+    background-color: red;
     cursor: not-allowed;
 }
 

@@ -34,70 +34,106 @@
 // Se avete finito tutti i bonus potete scrivere all'insegnante o ai tutor per ricevere delle sfide extra!
 
 
+
+
+// # PREPARAZIONE
+
 const playButton = document.getElementById('play-button');
 
-
-
-
 playButton.addEventListener('click', () => {
-    playButton.classList.add('clicked');
 
-    if (playButton.classList.contains('clicked')) {
-        playButton.innerText = 'Ricomincia';
+    playButton.innerText = 'Ricomincia';
+
+    const grid = document.getElementById('grid');
+
+    grid.innerText = '';
+
+    const level = document.getElementById('level').value;
+
+    let rows;
+
+    let cells;
+
+    switch (level) {
+
+        case "easy":
+        default:
+            rows = 10;
+            cells = 10;
+            break;
+
+        case "normal":
+            rows = 9;
+            cells = 9;
+            break;
+
+        case "hard":
+            rows = 7;
+            cells = 7;
+            break;
     }
 
-    // # PREPARAZIONE
-    const grid = document.getElementById('grid');
-    const rows = 10;
-    const cells = 10;
-    const totalCells = rows * cells;
-    let attempt = 0;
+    let totalCells = rows * cells;
 
+    console.log('il livello è ' + level);
 
     // # FUNZIONI
-    const createCell = content => {
-        const cellElement = document.createElement('div');
+    function createCell(selfNumber, cellsPerRow) {
+
+        let cellElement = document.createElement('div');
         cellElement.className = 'cell';
-        cellElement.innerText = content;
+        cellElement.innerText = selfNumber;
+        const sideLength = `calc(100% / ${cellsPerRow})`;
+        cellElement.style.height = sideLength;
+        cellElement.style.width = sideLength;
 
         return cellElement;
     }
 
-    const onCellClick = event => {
-        event.target.classList.add('clicked');
-        console.log(event.target.innerText);
-        do {
-            attempt++;
-        } while (event.target.classList.contains('clicked'));
-        console.log(attempt);
+    //
+    let attempts = 0;
+    let scores = totalCells - 16;
+
+    function onCellClick() {
+        if (this.classList.contains('clicked')) return;
+
+
+        if (bombs.includes(parseInt(this.innerText))) {
+            this.classList.add('clicked', 'red');
+            console.log(`Partita terminata! PUNTI: ` + attempts);
+        } else if (scores !== attempts) {
+            this.classList.add('clicked', 'blue');
+            attempts++;
+        }
+        else if (scores === attempts) {
+            alert(`Hai vinto! PUNTI: ` + attempts);
+        }
+
+        console.log(attempts);
+
+        console.log(this.innerText);
     }
 
     // # SVOLGIMENTO
+    let bomb;
+    let bombs = [];
+
+    do {
+        bomb = Math.floor(Math.random() * (totalCells + 1 - 1)) + 1;
+        bombs.push(bomb);
+    } while (!bombs.includes(bomb) || bombs.length < 16);
+
+    console.log(bombs);
+
+
+
     for (let i = 1; i <= totalCells; i++) {
 
-
-        const cell = createCell(i);
+        const cell = createCell(i, cells);
 
         cell.addEventListener('click', onCellClick);
 
         grid.appendChild(cell);
-
     }
 
-
-    // MILESTONE2
-    for (let i = 0; i < 16; i++) {
-        const min = 1;
-        const max = 100;
-        const extractedNumbers = [];
-
-        let randomNumber = Math.floor(Math.random() * (max + 1) + min);
-        do {
-            extractedNumbers.push(randomNumber)
-        } while (!extractedNumbers.includes(randomNumber));
-
-        console.log(extractedNumbers);
-
-
-    }
 })
