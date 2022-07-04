@@ -75,7 +75,7 @@ playButton.addEventListener('click', () => {
 
     let totalCells = rows * cells;
 
-    console.log('il livello è ' + level);
+    console.log('Livello ' + level);
 
     // # FUNZIONI
     function createCell(selfNumber, cellsPerRow) {
@@ -91,8 +91,9 @@ playButton.addEventListener('click', () => {
     }
 
     //
-    let attempts = 0;
-    let scores = totalCells - 16;
+    let scores = 0;
+    const totalBombs = 16
+    let attempts = totalCells - totalBombs;
 
     function onCellClick() {
         if (this.classList.contains('clicked')) return;
@@ -100,32 +101,41 @@ playButton.addEventListener('click', () => {
 
         if (bombs.includes(parseInt(this.innerText))) {
             this.classList.add('clicked', 'red');
-            console.log(`Partita terminata! PUNTI: ` + attempts);
-        } else if (scores !== attempts) {
+            console.log(`Partita terminata! PUNTI: ` + scores);
+        } else if (attempts !== scores) {
             this.classList.add('clicked', 'blue');
-            attempts++;
+            scores++;
         }
-        else if (scores === attempts) {
-            alert(`Hai vinto! PUNTI: ` + attempts);
+        else if (attempts === scores) {
+            alert(`Hai vinto! PUNTI: ` + scores);
         }
 
-        console.log(attempts);
+        console.log(scores);
 
         console.log(this.innerText);
     }
 
+    //
+    function generateBombs(totalBombs, totalCells) {
+        let bombs = [];
+
+        while (bombs.length < totalBombs) {
+            let bomb;
+            do {
+                bomb = Math.floor(Math.random() * (totalCells + 1 - 1)) + 1;
+
+            } while (bombs.includes(bomb));
+
+            bombs.push(bomb);
+        }
+
+        console.log(bombs);
+        return bombs;
+    }
+
     // # SVOLGIMENTO
-    let bomb;
-    let bombs = [];
 
-    do {
-        bomb = Math.floor(Math.random() * (totalCells + 1 - 1)) + 1;
-        bombs.push(bomb);
-    } while (!bombs.includes(bomb) || bombs.length < 16);
-
-    console.log(bombs);
-
-
+    const bombs = generateBombs(totalBombs, totalCells);
 
     for (let i = 1; i <= totalCells; i++) {
 
