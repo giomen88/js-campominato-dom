@@ -39,6 +39,7 @@
 // # PREPARAZIONE
 
 const playButton = document.getElementById('play-button');
+const gameMessageElement = document.getElementById('game-message');
 
 playButton.addEventListener('click', () => {
 
@@ -47,6 +48,8 @@ playButton.addEventListener('click', () => {
     const grid = document.getElementById('grid');
 
     grid.innerText = '';
+
+    gameMessageElement.innerHTML = '';
 
     const level = document.getElementById('level').value;
 
@@ -90,31 +93,9 @@ playButton.addEventListener('click', () => {
         return cellElement;
     }
 
-    //
-    let scores = 0;
     const totalBombs = 16
+    let scores = 0;
     let attempts = totalCells - totalBombs;
-
-    function onCellClick() {
-        if (this.classList.contains('clicked')) return;
-
-
-        if (bombs.includes(parseInt(this.innerText))) {
-            this.classList.add('clicked', 'red');
-            console.log(`Partita terminata! PUNTI: ` + scores);
-        } else if (attempts !== scores) {
-            this.classList.add('clicked', 'blue');
-            scores++;
-        }
-        else if (attempts === scores) {
-            alert(`Hai vinto! PUNTI: ` + scores);
-        }
-
-        console.log(scores);
-
-        console.log(this.innerText);
-    }
-
     //
     function generateBombs(totalBombs, totalCells) {
         let bombs = [];
@@ -132,6 +113,79 @@ playButton.addEventListener('click', () => {
         console.log(bombs);
         return bombs;
     }
+
+    //
+    function checkGameOver(cell, bombs) {
+
+        if (bombs.includes(parseInt(cell.innerText))) {
+            cell.classList.add('red');
+            return true;
+        } else {
+            cell.classList.add('blue');
+            return false;
+        }
+    }
+
+    //
+    function onCellClick() {
+
+        let fullMessage = '';
+        const startMessage = 'Partita terminata!';
+        const cellClicked = document.querySelectorAll('.cell');
+
+        if (this.classList.contains('clicked')) return;
+
+        this.classList.add('clicked');
+
+        const isGameOver = checkGameOver(this, bombs);
+
+        if (!isGameOver) {
+            scores++;
+        }
+
+        else {
+            fullMessage += `${startMessage} Il tuo punteggio è <strong>${scores}</strong>`;
+
+            for (let i = 0; i < cellClicked.length; i++) {
+                cellClicked[i].classList.add('clicked');
+            }
+        }
+
+        if (attempts === scores) {
+            fullMessage += `${startMessage} <strong>HAI VINTO!</strong>`;
+        }
+
+        gameMessageElement.innerHTML = fullMessage;
+        console.log(scores);
+
+        console.log(this.innerText);
+
+        /////////////////////////// SOLUZIONE SENZA FUNZIONE CHECKGAMEOVER
+
+        // if (bombs.includes(parseInt(this.innerText))) {
+        //     this.classList.add('clicked', 'red');
+        //     fullMessage += `${startMessage} Il tuo punteggio è <strong>${scores}</strong>`;
+
+        //     for (let i = 0; i < cellClicked.length; i++) {
+        //     cellClicked[i].classList.add('clicked');}
+
+        // }
+
+        // } else if (attempts !== scores) {
+        //     this.classList.add('clicked', 'blue');
+        //     scores++;
+        // }
+        // else if (attempts === scores) {
+        //     fullMessage += `${startMessage} <strong>HAI VINTO!</strong>`;
+        // }
+
+        // gameMessageElement.innerHTML = fullMessage;
+        // console.log(scores);
+
+        // console.log(this.innerText);
+    };
+    ///////////////////////////////////////////////////////////////////////
+
 
     // # SVOLGIMENTO
 
